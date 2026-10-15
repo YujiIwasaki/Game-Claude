@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>マルバツ国盗り</title>
+  <meta name="description" content="大・中・小の駒で陣地を奪い合う、乗っ取りルール付きの〇×ゲーム。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Yuji+Syuku&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <h1 class="title">マルバツ<span class="title-accent">国盗り</span></h1>
+      <p class="tagline">大きな駒で、陣地を奪え。</p>
+    </div>
+    <button type="button" class="btn btn-ghost" id="rulesBtn">遊び方</button>
+  </header>
+
+  <main>
+    <!-- 対局設定 -->
+    <section id="setup" class="setup" aria-labelledby="setupHeading">
+      <h2 id="setupHeading" class="section-title">対局設定</h2>
+      <div class="setup-grid">
+        <fieldset class="player-card" data-player="0">
+          <legend><span class="mark mark-o" aria-hidden="true"></span>先攻 〇軍</legend>
+          <div class="segmented" role="radiogroup" aria-label="先攻の操作">
+            <label><input type="radio" name="type0" value="human" checked><span>人間</span></label>
+            <label><input type="radio" name="type0" value="cpu"><span>コンピューター</span></label>
+          </div>
+          <label class="level-field">CPU の強さ
+            <select name="level0">
+              <option value="easy">やさしい</option>
+              <option value="normal">ふつう</option>
+              <option value="strong" selected>つよい</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset class="player-card" data-player="1">
+          <legend><span class="mark mark-x" aria-hidden="true"></span>後攻 ×軍</legend>
+          <div class="segmented" role="radiogroup" aria-label="後攻の操作">
+            <label><input type="radio" name="type1" value="human"><span>人間</span></label>
+            <label><input type="radio" name="type1" value="cpu" checked><span>コンピューター</span></label>
+          </div>
+          <label class="level-field">CPU の強さ
+            <select name="level1">
+              <option value="easy">やさしい</option>
+              <option value="normal">ふつう</option>
+              <option value="strong" selected>つよい</option>
+            </select>
+          </label>
+        </fieldset>
+      </div>
+      <button type="button" class="btn btn-primary btn-large" id="startBtn">対局開始</button>
+    </section>
+
+    <!-- 対局 -->
+    <section id="game" class="game" hidden aria-label="対局">
+      <div class="status" id="status" aria-live="polite"></div>
+
+      <div class="arena">
+        <aside class="hand" id="hand0" data-player="0"></aside>
+        <div class="board-wrap">
+          <div class="board" id="board" role="grid" aria-label="盤面"></div>
+        </div>
+        <aside class="hand" id="hand1" data-player="1"></aside>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="btn" id="undoBtn">待った</button>
+        <button type="button" class="btn" id="againBtn">もう一局</button>
+        <button type="button" class="btn" id="swapBtn">先後入れ替え</button>
+        <button type="button" class="btn btn-ghost" id="backBtn">設定に戻る</button>
+      </div>
+
+      <div class="info">
+        <section class="info-card">
+          <h3>戦績</h3>
+          <dl class="score" id="score"></dl>
+          <button type="button" class="link-btn" id="resetScoreBtn">戦績をリセット</button>
+        </section>
+        <section class="info-card">
+          <h3>棋譜</h3>
+          <ol class="log" id="log"></ol>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="rulesDialog" class="rules" aria-labelledby="rulesHeading">
+    <h2 id="rulesHeading">遊び方</h2>
+    <ol>
+      <li>〇（先攻）と ×（後攻）が交互に、手駒を盤のマスに 1 つずつ置きます。</li>
+      <li>縦・横・斜めのどれかに、<strong>一番上に見えている自分の駒</strong>が 3 つ並べば勝ち。</li>
+      <li>手駒は <strong>大・中・小 を 2 個ずつ</strong>、計 6 個。</li>
+      <li>相手（または自分）の駒より <strong>大きい駒</strong> を上に置けば、そのマスを<strong>乗っ取れ</strong>ます。同じ大きさには置けません。</li>
+      <li>盤上の駒は動かせません。下に隠れた駒は二度と出てきません（マスの下の点が隠れた駒の数）。</li>
+      <li>置ける場所がない人はパス。両者とも置けなくなったら引き分けです。</li>
+    </ol>
+    <h3>操作</h3>
+    <p>手駒（大・中・小）を選ぶと、置けるマスが光ります。キーボードの <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> で小/中/大を選べます。</p>
+    <form method="dialog"><button class="btn btn-primary">閉じる</button></form>
+  </dialog>
+
+  <script src="game.js"></script>
+  <script src="ai.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>
